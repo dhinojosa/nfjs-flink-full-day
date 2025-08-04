@@ -1,0 +1,9 @@
+services:
+    nginx:
+        image: nginx
+        hostname: nginx
+        container_name: nginx
+        ports:
+            - 8000:80
+        volumes:
+            - ./lab_book:/usr/share/nginx/html
