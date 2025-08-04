@@ -519,7 +519,6 @@ pre.pygments .tok-il { color: #40A070 } /* Literal.Number.Integer.Long */
 <ul class="sectlevel1">
 <li><a href="#_lab_deploying_a_flink_application">Lab: Deploying A Flink Application</a></li>
 <li><a href="#_lab_flink_sql">Lab: Flink SQL</a></li>
-<li><a href="#_lab_transactional_outbox">Lab: Transactional Outbox</a></li>
 <li><a href="#_lab_cqrs">Lab: CQRS</a>
 <ul class="sectlevel2">
 <li><a href="#_launch_initial_containers">Launch Initial Containers</a></li>
@@ -531,6 +530,7 @@ pre.pygments .tok-il { color: #40A070 } /* Literal.Number.Integer.Long */
 <li><a href="#_view_the_postgres_read_database">View the Postgres Read Database</a></li>
 </ul>
 </li>
+<li><a href="#_lab_transactional_outbox">Lab: Transactional Outbox</a></li>
 <li><a href="#_lab_stateful_processing">Lab: Stateful Processing</a></li>
 <li><a href="#_lab_windowing">Lab: Windowing</a></li>
 <li><a href="#_lab_testing">Lab: Testing</a></li>
@@ -545,7 +545,7 @@ pre.pygments .tok-il { color: #40A070 } /* Literal.Number.Integer.Long */
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>In the nfjs-flink-full-day application, go to the <em>docker-compose.yaml</em>. Right Click and select <em>Docker Compose Up</em>.</p>
+<p>In the nfjs-flink-full-day application, go to the <em>docker-compose.yaml</em>. Right-Click and select <em>Docker Compose Up</em>.</p>
 </li>
 <li>
 <p>View the <em>docker-compose.yaml</em> and view the component parts. In particular, the <strong>job-manager</strong> and the <strong>task-manager</strong>.</p>
@@ -593,7 +593,7 @@ docker<span class="tok-w"> </span><span class="tok-nb">exec</span><span class="t
 </div>
 </li>
 <li>
-<p>Open a terminal and run <code>mvn package</code>, and notice the <em>target/basic-stream-1.0.jar</em>. This is an uber jar, with all the dependencies that it needs.</p>
+<p>Open a terminal and in the <em>basic-stream</em> module, run <code>mvn package</code>, and notice the <em>target/basic-stream-1.0.jar</em>. This is an uber jar, with all the dependencies that it needs.</p>
 </li>
 <li>
 <p>Go to the <em>kafka-producer</em> module, in this module we are going to run a kafka-producer that produces messages to the topic <em>my_orders</em>.  You can start the producer in either the IDE itself, or you can use maven.</p>
@@ -604,29 +604,25 @@ docker<span class="tok-w"> </span><span class="tok-nb">exec</span><span class="t
 </div>
 </li>
 <li>
-<p>Go back to the <em>basic-stream</em> module, and let&#8217;s submit the <em>basic-stream-1.0.jar</em> file to the job manager. First view the <em>Dockerfile</em>. It is a multi-build docker file, we will compile the code, and then this will run it and submit the job</p>
+<p>Go back to the <em>basic-stream</em> module, and let&#8217;s submit the <em>basic-stream-1.0.jar</em> file to the job manager.</p>
+</li>
+<li>
+<p>Create a flink container with the executable, and run it so your job runs</p>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="dockerfile"><span></span><span class="tok-k">FROM</span><span class="tok-w"> </span><span class="tok-s">maven:3-eclipse-temurin-21</span><span class="tok-w"> </span><span class="tok-k">as</span><span class="tok-w"> </span><span class="tok-s">builder</span>
-<span class="tok-k">WORKDIR</span><span class="tok-w"> </span><span class="tok-s">/app</span>
-<span class="tok-k">COPY</span><span class="tok-w"> </span>.<span class="tok-w"> </span>.
-<span class="tok-k">RUN</span><span class="tok-w"> </span>mvn<span class="tok-w"> </span>-o<span class="tok-w"> </span>-DskipTests<span class="tok-w"> </span>-fn<span class="tok-w"> </span>package
-
-<span class="tok-c"># Runtime stage</span>
-<span class="tok-k">FROM</span><span class="tok-w"> </span><span class="tok-s">apache/flink:2.0.0-scala_2.12-java21</span>
-<span class="tok-k">COPY</span><span class="tok-w"> </span>--from<span class="tok-o">=</span>builder<span class="tok-w"> </span>/app/target/basic-stream-*.jar<span class="tok-w"> </span>/opt/flink/usrlib/basic-stream.jar
-
-<span class="tok-k">ENV</span><span class="tok-w"> </span><span class="tok-nv">FLINK_JOBMANAGER_URL</span><span class="tok-o">=</span>http://jobmanager:8081
-<span class="tok-k">USER</span><span class="tok-w"> </span><span class="tok-s">flink</span>
-<span class="tok-k">CMD</span><span class="tok-w"> </span><span class="tok-p">[</span><span class="tok-s2">&quot;flink&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s2">&quot;run&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s2">&quot;--jobmanager&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s2">&quot;$FLINK_JOBMANAGER_URL&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s2">&quot;/opt/flink/usrlib/basic-stream.jar&quot;</span><span class="tok-p">]</span></code></pre>
+<pre class="pygments highlight"><code data-lang="shell"><span></span>docker<span class="tok-w"> </span>run<span class="tok-w"> </span>-it<span class="tok-w"> </span><span class="tok-se">\</span>
+<span class="tok-w">  </span>--network<span class="tok-w"> </span>basic-stream_default<span class="tok-w"> </span><span class="tok-se">\</span>
+<span class="tok-w">  </span>-v<span class="tok-w"> </span><span class="tok-k">$(</span><span class="tok-nb">pwd</span><span class="tok-k">)</span>/target:/target<span class="tok-w"> </span><span class="tok-se">\</span>
+<span class="tok-w">  </span>apache/flink:1.20.1-scala_2.12-java11<span class="tok-w"> </span><span class="tok-se">\</span>
+<span class="tok-w">  </span>/bin/bash</code></pre>
 </div>
 </div>
 </li>
 <li>
-<p>Create the container, and run it so your job runs</p>
+<p><code>cd</code> into the target folder, and submit the job</p>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="shell"></code></pre>
+<pre class="pygments highlight"><code data-lang="shell"><span></span>flink<span class="tok-w"> </span>run<span class="tok-w"> </span>--jobmanager<span class="tok-w"> </span>http://flink-jobmanager:8081<span class="tok-w"> </span>basic-stream-1.0.jar</code></pre>
 </div>
 </div>
 </li>
@@ -685,32 +681,6 @@ docker<span class="tok-w"> </span><span class="tok-nb">exec</span><span class="t
 </li>
 <li>
 <p>Open <em>src/test/java</em> and the <code>com.evolutionnext.FlinkTableTest</code> and let&#8217;s discuss</p>
-</li>
-</ol>
-</div>
-<div class="imageblock text-center">
-<div class="content">
-<img src="./images/stop.png" alt="stop" width="15%" height="15%">
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_lab_transactional_outbox">Lab: Transactional Outbox</h2>
-<div class="sectionbody">
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Open the <em>transactional_outbox</em> module</p>
-</li>
-<li>
-<p>Let&#8217;s discuss the code. It is a hexagonal architecture/ports and adapters architecture.</p>
-</li>
-<li>
-<p>Note the databases that we are using, one for orders, one for order items, and the other for the outbox.</p>
-</li>
-<li>
-<p>We can use the outbox to send items to Kafka using Kafka Connect. Once that is established, we can use FlinkSQL to further process data and perform other items with it.</p>
 </li>
 </ol>
 </div>
@@ -1009,6 +979,32 @@ image::stop.png[width=15%, height=15%, align=center]</p>
 </div>
 </div>
 <div class="sect1">
+<h2 id="_lab_transactional_outbox">Lab: Transactional Outbox</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Open the <em>transactional_outbox</em> module</p>
+</li>
+<li>
+<p>Let&#8217;s discuss the code. It is a hexagonal architecture/ports and adapters architecture.</p>
+</li>
+<li>
+<p>Note the databases that we are using, one for orders, one for order items, and the other for the outbox.</p>
+</li>
+<li>
+<p>We can use the outbox to send items to Kafka using Kafka Connect. Once that is established, we can use FlinkSQL to further process data and perform other items with it.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="./images/stop.png" alt="stop" width="15%" height="15%">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_lab_stateful_processing">Lab: Stateful Processing</h2>
 <div class="sectionbody">
 <div class="olist arabic">
@@ -1093,7 +1089,7 @@ image::stop.png[width=15%, height=15%, align=center]</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-08-03 14:46:11 UTC
+Last updated 2025-08-04 13:48:05 UTC
 </div>
 </div>
 </body>
