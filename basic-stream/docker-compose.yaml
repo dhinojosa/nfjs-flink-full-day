@@ -26,19 +26,6 @@ services:
             # See https://docs.confluent.io/kafka/operations-tools/kafka-tools.html#kafka-storage-sh
             CLUSTER_ID: 'MkU3OEVBNTcwNTJENDM2Qk'
 
-    minio:
-        image: minio/minio:latest
-        container_name: minio
-        environment:
-            MINIO_ROOT_USER: minioadmin
-            MINIO_ROOT_PASSWORD: minioadmin
-        command: server /data --console-address ":9001"
-        ports:
-            - "9000:9000"
-            - "9001:9001"
-        volumes:
-            - minio-data:/data
-
     schema-registry:
         image: confluentinc/cp-schema-registry:7.6.1
         hostname: schema-registry
