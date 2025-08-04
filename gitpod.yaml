@@ -1,0 +1,8 @@
+image:
+    file: .gitpod.Dockerfile
+
+vscode:
+    extensions:
+        - ms-vscode-remote.remote-containers
+        - ms-azuretools.vscode-docker
+        - vscjava.vscode-java-pack
