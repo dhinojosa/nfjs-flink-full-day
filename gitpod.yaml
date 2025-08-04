@@ -3,7 +3,8 @@ image:
 
 tasks:
     -   init: |
-            sdk install java 11.0.12.7.1-tem
+            sdk install java 21.0.8-tem < /dev/null
+            sdk install java 11.0.26-tem < /dev/null
 
 vscode:
     extensions:
