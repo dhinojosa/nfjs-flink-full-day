@@ -1,6 +1,10 @@
 image:
     file: .gitpod.Dockerfile
 
+tasks:
+    -   init: |
+            sdk install java 11.0.12.7.1-tem
+
 vscode:
     extensions:
         - ms-vscode-remote.remote-containers
