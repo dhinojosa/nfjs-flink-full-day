@@ -5,6 +5,6 @@ tasks:
 
 vscode:
     extensions:
-        - ms-vscode-remote.remote-containers
         - ms-azuretools.vscode-docker
         - vscjava.vscode-java-pack
+        - ms-azuretools.vscode-containers
