@@ -9,7 +9,7 @@ RUN apt-get update && \
 USER vscode
 ENV SDKMAN_DIR="/home/vscode/.sdkman"
 RUN curl -s "https://get.sdkman.io" | bash && \
-    bash -c "source $SDKMAN_DIR/bin/sdkman-init.sh && yes | sdk install java 11.0.29 && yes | sdk install maven"
+    bash -c "source $SDKMAN_DIR/bin/sdkman-init.sh && yes | sdk install java 11.0.29-tem && yes | sdk install maven"
 
 # Add Java and Maven to PATH
 ENV PATH="/home/vscode/.sdkman/candidates/java/current/bin:/home/vscode/.sdkman/candidates/maven/current/bin:$PATH"
