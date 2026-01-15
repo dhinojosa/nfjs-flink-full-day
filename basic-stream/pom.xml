@@ -18,10 +18,10 @@
     </properties>
 
     <dependencies>
-        <dependency>
+        <!-- <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-java</artifactId>
-        </dependency>
+        </dependency> -->
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-state-processor-api</artifactId>
