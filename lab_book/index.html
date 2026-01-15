@@ -607,19 +607,19 @@ docker<span class="tok-w"> </span><span class="tok-nb">exec</span><span class="t
 <p>Go back to the <em>basic-stream</em> module, and let&#8217;s submit the <em>basic-stream-1.0.jar</em> file to the job manager.</p>
 </li>
 <li>
-<p>Create a flink container with the executable, and run it so your job runs</p>
+<p>Create a flink container with the executable and run it so your job runs</p>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="shell"><span></span>docker<span class="tok-w"> </span>run<span class="tok-w"> </span>-it<span class="tok-w"> </span><span class="tok-se">\</span>
 <span class="tok-w">  </span>--network<span class="tok-w"> </span>basic-stream_default<span class="tok-w"> </span><span class="tok-se">\</span>
 <span class="tok-w">  </span>-v<span class="tok-w"> </span><span class="tok-k">$(</span><span class="tok-nb">pwd</span><span class="tok-k">)</span>/target:/target<span class="tok-w"> </span><span class="tok-se">\</span>
-<span class="tok-w">  </span>apache/flink:1.20.1-scala_2.12-java11<span class="tok-w"> </span><span class="tok-se">\</span>
+<span class="tok-w">  </span>flink:scala_2.12-java21@sha256:66a49f6383b60bd985d3870628c7c665e0e026c85616a557cb1bccb439365b2a<span class="tok-w"> </span><span class="tok-se">\</span>
 <span class="tok-w">  </span>/bin/bash</code></pre>
 </div>
 </div>
 </li>
 <li>
-<p><code>cd</code> into the target folder, and submit the job</p>
+<p><code>cd</code> into the <code>/target</code> folder, and submit the job</p>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="shell"><span></span>flink<span class="tok-w"> </span>run<span class="tok-w"> </span>--jobmanager<span class="tok-w"> </span>http://flink-jobmanager:8081<span class="tok-w"> </span>basic-stream-1.0.jar</code></pre>
@@ -627,7 +627,7 @@ docker<span class="tok-w"> </span><span class="tok-nb">exec</span><span class="t
 </div>
 </li>
 <li>
-<p>Go to the <em>Containers</em> menu, and right-click the job manager. Select "Open in Browser". Here you should see the Flink UI. The Flink UI is your view of the job that is running. You should see your job currently running in the "Running Jobs" menu. Discover the UI, by looking around.</p>
+<p>Go to the <em>Containers</em> menu and right-click the job manager. Select "Open in Browser". Here you should see the Flink UI. The Flink UI is your view of the job that is running. You should see your job currently running in the "Running Jobs" menu. Discover the UI by looking around.</p>
 </li>
 <li>
 <p>Let us verify that the stream is working by viewing the filtered topic. We first look at the "before topic"</p>
@@ -660,7 +660,10 @@ docker<span class="tok-w"> </span><span class="tok-nb">exec</span><span class="t
 </div>
 </li>
 <li>
-<p>Go to the UI, and cancel the job</p>
+<p>Go to the UI and cancel the job</p>
+</li>
+<li>
+<p>Perform a compose-down on the resources used</p>
 </li>
 </ol>
 </div>
@@ -737,7 +740,7 @@ docker<span class="tok-w"> </span><span class="tok-nb">exec</span><span class="t
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Run the <code>com.evolutionnext.CreateStocks</code> application by doing the following:</p>
+<p>Run the <code>CreateStocks</code> application by doing the following:</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -747,7 +750,7 @@ docker<span class="tok-w"> </span><span class="tok-nb">exec</span><span class="t
 <p><code>cd cqrs</code></p>
 </li>
 <li>
-<p>Run <code>mvn clean compile exec:java -Dexec.mainClass=com.evolutionnext.cqrs.com.evolutionnext.CreateStocks</code> to generate data.</p>
+<p>Run <code>mvn clean compile exec:java -Dexec.mainClass=com.evolutionnext.cqrs.CreateStocks</code> to generate data.</p>
 </li>
 </ol>
 </div>
