@@ -46,12 +46,7 @@ services:
             - JOB_MANAGER_RPC_ADDRESS=flink-jobmanager
         ports:
             - "8081:8081"
-        command: >
-            bash -c "
-            curl -L -o /opt/flink/lib/flink-sql-connector-kafka-4.0.1-2.0.jar
-            https://repo1.maven.org/maven2/org/apache/flink/flink-sql-connector-kafka/4.0.1-2.0/flink-sql-connector-kafka-4.0.1-2.0.jar &&
-            /docker-entrypoint.sh taskmanager
-            "
+        command: jobmanager
 
     flink-taskmanager:
         image: flink:scala_2.12-java21@sha256:66a49f6383b60bd985d3870628c7c665e0e026c85616a557cb1bccb439365b2a
@@ -61,10 +56,5 @@ services:
         environment:
             - JOB_MANAGER_RPC_ADDRESS=flink-jobmanager
             - TASK_MANAGER_NUMBER_OF_TASK_SLOTS=4
-        command: >
-            bash -c "
-            curl -L -o /opt/flink/lib/flink-sql-connector-kafka-4.0.1-2.0.jar
-            https://repo1.maven.org/maven2/org/apache/flink/flink-sql-connector-kafka/4.0.1-2.0/flink-sql-connector-kafka-4.0.1-2.0.jar &&
-            /docker-entrypoint.sh taskmanager
-            "
+        command: taskmanager
 
