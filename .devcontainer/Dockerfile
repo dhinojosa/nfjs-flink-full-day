@@ -43,4 +43,15 @@ RUN MAVEN_VERSION=3.9.8 \
 ENV MAVEN_HOME=/usr/local/maven
 ENV PATH="${MAVEN_HOME}/bin:${PATH}"
 
+# Install Flink
+RUN FLINK_VERSION=2.1.1 \
+    && FLINK_SCALA_VERSION=2.12 \
+    && curl -fL -o /tmp/flink-bin.tgz "https://dlcdn.apache.org/flink/flink-${FLINK_VERSION}/flink-${FLINK_VERSION}-bin-scala_${FLINK_SCALA_VERSION}.tgz" \
+    && tar -xzf /tmp/flink-bin.tgz -C /usr/local/ \
+    && rm /tmp/flink-bin.tgz \
+    && mv "/usr/local/flink-${FLINK_VERSION}" /usr/local/flink
+
+ENV FLINK_HOME=/usr/local/flink
+ENV PATH="${FLINK_HOME}/bin:${PATH}"
+
 USER vscode
